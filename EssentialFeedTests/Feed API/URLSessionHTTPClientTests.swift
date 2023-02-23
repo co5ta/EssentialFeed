@@ -87,9 +87,9 @@ final class URLSessionHTTPClientTests: XCTestCase {
         return sut
     }
 
-    private func resultErrorFor(data: Data?, response: URLResponse?, error: Error?) -> Error? {
+    private func resultErrorFor(data: Data?, response: URLResponse?, error: Error?, file: StaticString = #file, line: UInt = #line) -> Error? {
         URLProtocolStub.stub(data: data, response: response, error: error)
-        let sut = makeSUT()
+        let sut = makeSUT(file: file, line: line)
         var receivedError: Error?
 
         let exp = expectation(description: "wait for get(from:) completion")
@@ -98,7 +98,7 @@ final class URLSessionHTTPClientTests: XCTestCase {
             case .failure(let error):
                 receivedError = error
             default:
-                XCTFail("Expected failure, got \(result) instead")
+                XCTFail("Expected failure, got \(result) instead", file: file, line: line)
             }
             exp.fulfill()
         }
