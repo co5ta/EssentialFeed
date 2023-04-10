@@ -13,4 +13,4 @@ public protocol FeedStore {
 
     func deleteCachedFeed(completion: @escaping DeletionCompletion)
     func insert(_ items: [FeedItem], timestamp: Date, completion: @escaping InsertionCompletion)
-}
+} 
