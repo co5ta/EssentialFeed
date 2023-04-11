@@ -1,5 +1,5 @@
 //
-//  LocaleFeedLoader.swift
+//  LocalFeedLoader.swift
 //  EssentialFeed
 //
 //  Created by Costa Monzili on 10/04/2023.
