@@ -14,6 +14,14 @@ final class LoadFeedUseCaseTests: XCTestCase {
 
         XCTAssertEqual(store.receivedMessages, [])
     }
+
+    func test_load() {
+        let (sut, store) = makeSUT()
+
+        sut.load()
+
+        XCTAssertEqual(store.receivedMessages, [.retrieve])
+    }
 }
 
 extension LoadFeedUseCaseTests {
