@@ -39,6 +39,17 @@ final class LoadFeedUseCaseTests: XCTestCase {
             store.completeRetrievalWithEmptyCache()
         })
     }
+
+    func test_load_deliversCachedImagesOnLessThanSevenDaysOldCache() {
+        let fixedCurrentDate = Date()
+        let (sut, store) = makeSUT(currentDate: { fixedCurrentDate })
+        let feed = uniqueImageFeed()
+        let lessThanSevenDaysOldTimestamp = fixedCurrentDate.adding(days: -7).adding(seconds: 1)
+
+        expect(sut, toCompleteWith: .success(feed.model), when: {
+            store.completeRetrieval(with: feed.local, timestamp: lessThanSevenDaysOldTimestamp)
+        })
+    }
 }
 
 extension LoadFeedUseCaseTests {
@@ -67,7 +78,27 @@ extension LoadFeedUseCaseTests {
         wait(for: [exp], timeout: 1.0)
     }
 
+    private func uniqueImageFeed() -> (model: [FeedImage], local: [LocalFeedImage]) {
+        let model = [FeedImage(id: UUID(), description: nil, location: nil, url: anyURL)]
+        let local = model.map { LocalFeedImage(id: $0.id, description: $0.description, location: $0.location, url: $0.url) }
+        return (model: model, local: local)
+    }
+
+    private var anyURL: URL {
+        URL(string: "http://any-url.com")!
+    }
+
     private var anyNSError: NSError {
         NSError(domain: "", code: 0)
+    }
+}
+
+private extension Date {
+    func adding(days: Int) -> Date {
+        return Calendar(identifier: .gregorian).date(byAdding: .day, value: days, to: self)!
+    }
+
+    func adding(seconds: TimeInterval) -> Date {
+        return self + seconds
     }
 }
