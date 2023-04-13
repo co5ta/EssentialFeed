@@ -90,6 +90,17 @@ final class LoadFeedUseCaseTests: XCTestCase {
 
         XCTAssertEqual(store.receivedMessages, [.retrieve])
     }
+
+    func test_load_doesNotDeleteCacheOnLessThanSevenDaysOldCache() {
+        let fixedCurrentDate = Date()
+        let (sut, store) = makeSUT(currentDate: { fixedCurrentDate })
+        let lessThanSeventDaysOldTimestamp = fixedCurrentDate.adding(days: -7).adding(seconds: 1)
+
+        sut.load { _ in }
+        store.completeRetrieval(with: uniqueImageFeed().local, timestamp: lessThanSeventDaysOldTimestamp)
+
+        XCTAssertEqual(store.receivedMessages, [.retrieve])
+    }
 }
 
 extension LoadFeedUseCaseTests {
