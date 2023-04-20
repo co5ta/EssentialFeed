@@ -115,6 +115,14 @@ class CodableFeedStoreTests: XCTestCase {
 
         expect(sut, toRetrieve: .failure(anyNSError))
     }
+
+    func test_retrieve_hasNoSideEffectOnFailure() {
+        let sut = makeSUT()
+
+        try! "invalid data".write(to: testSpecificStoreURL, atomically: false, encoding: .utf8)
+
+        expect(sut, toRetrieveTwice: .failure(anyNSError))
+    }
 }
 
 // MARK: - Helpers
@@ -151,7 +159,7 @@ extension CodableFeedStoreTests {
             case let (.found (expectedFeed, expectedTimestamp), .found (retrievedFeed, retrievedTimestamp)):
                 XCTAssertEqual(retrievedFeed, expectedFeed, file: file, line: line)
                 XCTAssertEqual (retrievedTimestamp, expectedTimestamp, file: file, line: line)
-                
+
             default:
                 XCTFail("Expected to retrieve \(expectedResult), got \(retrievedResult) instead", file: file, line: line)
             }
