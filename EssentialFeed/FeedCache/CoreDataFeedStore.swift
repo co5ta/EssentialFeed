@@ -17,11 +17,52 @@ public final class CoreDataFeedStore: FeedStore {
     }
 
     public func retrieve(completion: @escaping RetrievalCompletion) {
-        completion(.empty)
+        context.perform { [context] in
+            let request = NSFetchRequest<ManagedCache>(entityName: ManagedCache.entity().name!)
+            request.returnsObjectsAsFaults = false
+
+            do {
+                guard let managedCache = try context.fetch(request).first else {
+                    return completion(.empty)
+                }
+                let localFeed = managedCache.feed
+                    .compactMap { $0 as? ManagedFeedImage }
+                    .map { managedFeedImage in
+                    let localFeedImage = LocalFeedImage(
+                        id: managedFeedImage.id,
+                        description: managedFeedImage.imageDescription,
+                        location: managedFeedImage.location,
+                        url: managedFeedImage.url)
+                    return localFeedImage
+                }
+                completion(.found(feed: localFeed, timestamp: managedCache.timestamp))
+            } catch {
+                completion(.failure(error))
+            }
+        }
     }
 
     public func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
+        context.perform { [context] in
+            let managedCache = ManagedCache(context: context)
+            managedCache.timestamp = timestamp
+            managedCache.feed = NSOrderedSet(array: feed.map { localFeed in
+                let managedFeedImage = ManagedFeedImage(context: context)
+                managedFeedImage.id = localFeed.id
+                managedFeedImage.imageDescription = localFeed.description
+                managedFeedImage.location = localFeed.location
+                managedFeedImage.url = localFeed.url
+                managedFeedImage.cache = managedCache
+                return managedFeedImage
+            })
 
+            do {
+                try context.save()
+                completion(nil)
+            } catch {
+                completion(error)
+            }
+        }
     }
 
     public func deleteCachedFeed(completion: @escaping DeletionCompletion) {
@@ -60,11 +101,13 @@ private extension NSManagedObjectModel {
     }
 }
 
+@objc(ManagedCache)
 private class ManagedCache: NSManagedObject {
     @NSManaged var timestamp: Date
     @NSManaged var feed: NSOrderedSet
 }
 
+@objc(ManagedFeedImage)
 private class ManagedFeedImage: NSManagedObject {
     @NSManaged var id: UUID
     @NSManaged var imageDescription: String?
