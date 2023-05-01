@@ -30,12 +30,7 @@ final class EssentialFeedCacheIntegrationTests: XCTestCase {
         let sutPerformLoad = makeSUT()
         let feed = uniqueImageFeed().model
 
-        let saveExp = expectation(description: "wait for save completion")
-        sutPerformSave.save(feed) { saveError in
-            XCTAssertNil(saveError, "expected to save feed successfully")
-            saveExp.fulfill()
-        }
-        wait(for: [saveExp], timeout: 1.0)
+        save(feed, with: sutPerformSave)
 
         expect(sutPerformLoad, toLoad: feed)
     }
@@ -47,19 +42,8 @@ final class EssentialFeedCacheIntegrationTests: XCTestCase {
         let firstFeed = uniqueImageFeed().model
         let lastFeed = uniqueImageFeed().model
 
-        let firstSaveExp = expectation(description: "wait for save completion")
-        sutPerformFirstSave.save(firstFeed) { saveError in
-            XCTAssertNil(saveError, "expected to save feed successfully")
-            firstSaveExp.fulfill()
-        }
-        wait(for: [firstSaveExp], timeout: 1.0)
-
-        let lastSaveExp = expectation(description: "wait for save completion")
-        sutPerformLastSave.save(lastFeed) { saveError in
-            XCTAssertNil(saveError, "expected to save feed successfully")
-            lastSaveExp.fulfill()
-        }
-        wait(for: [lastSaveExp], timeout: 1.0)
+        save(firstFeed, with: sutPerformFirstSave)
+        save(lastFeed, with: sutPerformLastSave)
 
         expect(sutPerformLoad, toLoad: lastFeed)
     }
@@ -85,6 +69,15 @@ extension EssentialFeedCacheIntegrationTests {
             case let .failure(error):
                 XCTFail("expected success feed result, got \(error) instead", file: file, line: line)
             }
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1.0)
+    }
+
+    private func save(_ feed: [FeedImage], with loader: LocalFeedLoader, file: StaticString = #file, line: UInt = #line) {
+        let exp = expectation(description: "wait for save completion")
+        loader.save(feed) { saveError in
+            XCTAssertNil(saveError, "expected to save feed successfully", file: file, line: line)
             exp.fulfill()
         }
         wait(for: [exp], timeout: 1.0)
