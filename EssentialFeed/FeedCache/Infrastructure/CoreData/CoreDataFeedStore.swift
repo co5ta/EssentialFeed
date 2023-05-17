@@ -20,9 +20,9 @@ public final class CoreDataFeedStore: FeedStore {
         context.perform { [context] in
             do {
                 guard let cache = try ManagedCache.find(in: context) else {
-                    return completion(.success(.empty))
+                    return completion(.success(nil))
                 }
-                completion(.success(.found(feed: cache.localFeed, timestamp: cache.timestamp)))
+                completion(.success((CachedFeed(feed: cache.localFeed, timestamp: cache.timestamp))))
             } catch {
                 completion(.failure(error))
             }
