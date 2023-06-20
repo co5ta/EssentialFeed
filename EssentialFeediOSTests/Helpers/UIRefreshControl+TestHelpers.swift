@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import EssentialFeed
 
 extension UIRefreshControl {
     func simulatePullToRefresh() {
