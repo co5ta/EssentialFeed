@@ -407,9 +407,8 @@
 		448B40942A167DF000FF187C /* EssentialFeediOSTests */ = {
 			isa = PBXGroup;
 			children = (
-				4497372E2A4225BE008A713E /* Helpers */,
 				448B409E2A167EDD00FF187C /* EssentialFeediOS.xctestplan */,
-				448B409F2A17B4F500FF187C /* FeedViewControllerTests.swift */,
+				4497373F2A431042008A713E /* FeedUI */,
 			);
 			path = EssentialFeediOSTests;
 			sourceTree = "<group>";
@@ -434,6 +433,23 @@
 				4497373B2A430D99008A713E /* FeedViewControllerTests+TestHelpers.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		4497373F2A431042008A713E /* FeedUI */ = {
+			isa = PBXGroup;
+			children = (
+				449737402A431254008A713E /* Controllers */,
+				4497372E2A4225BE008A713E /* Helpers */,
+			);
+			path = FeedUI;
+			sourceTree = "<group>";
+		};
+		449737402A431254008A713E /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				448B409F2A17B4F500FF187C /* FeedViewControllerTests.swift */,
+			);
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 		44D463FA29A192A4001C91A0 /* Helpers */ = {
