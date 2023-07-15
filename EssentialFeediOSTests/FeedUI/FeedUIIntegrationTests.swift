@@ -252,6 +252,22 @@ final class FeedUIIntegrationTests: XCTestCase {
 
         XCTAssertNil(view?.renderedImage, "expected no rendered image when an image load finishes after the view is not visible anymore")
     }
+}
+
+// MARK: - Helpers
+
+extension FeedUIIntegrationTests {
+    private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: FeedViewController, loader: LoaderSpy) {
+        let loader = LoaderSpy()
+        let sut = FeedUIComposer.feedComposedWith(feedLoader: loader, imageLoader: loader)
+        trackForMemoryLeaks(element: sut, file: file, line: line)
+        trackForMemoryLeaks(element: loader, file: file, line: line)
+        return (sut, loader)
+    }
+
+    private func makeImage(description: String? = nil, location: String? = nil, url: URL = URL(string: "http://any-url.com")!) -> FeedImage {
+        return FeedImage(id: UUID(), description: description, location: location, url: url)
+    }
 
     private func anyImageData() -> Data {
         UIImage.make(withColor: .red).pngData()!

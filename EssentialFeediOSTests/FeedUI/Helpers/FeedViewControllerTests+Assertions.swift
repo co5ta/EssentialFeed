@@ -10,18 +10,6 @@ import EssentialFeed
 import EssentialFeediOS
 
 extension FeedUIIntegrationTests {
-    func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: FeedViewController, loader: LoaderSpy) {
-        let loader = LoaderSpy()
-        let sut = FeedUIComposer.feedComposedWith(feedLoader: loader, imageLoader: loader)
-        trackForMemoryLeaks(element: sut, file: file, line: line)
-        trackForMemoryLeaks(element: loader, file: file, line: line)
-        return (sut, loader)
-    }
-
-    func makeImage(description: String? = nil, location: String? = nil, url: URL = URL(string: "http://any-url.com")!) -> FeedImage {
-        return FeedImage(id: UUID(), description: description, location: location, url: url)
-    }
-
     func assertThat(_ sut: FeedViewController, hasViewConfiguredFor image: FeedImage, at index: Int, file: StaticString = #file, line: UInt = #line) {
         let view = sut.feedImageView(at: index)
 
