@@ -40,7 +40,7 @@ final class FeedPresenter {
     }
 
     func didStartLoadingFeed() {
-        errorView.display(FeedErrorViewModel(message: nil))
+        errorView.display(FeedErrorViewModel.noError)
         loadingView.display(FeedLoadingViewModel(isLoading: true))
     }
 
@@ -50,7 +50,7 @@ final class FeedPresenter {
     }
 
     func didFinishLoadingFeed(with error: Error) {
-        errorView.display(FeedErrorViewModel(message: feedLoadError))
+        errorView.display(FeedErrorViewModel.error(message: feedLoadError))
         loadingView.display(FeedLoadingViewModel(isLoading: false))
     }
 }
