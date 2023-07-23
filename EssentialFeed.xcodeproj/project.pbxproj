@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4405527C2A6D6C98008D411D /* FeedPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4405527B2A6D6C98008D411D /* FeedPresenterTests.swift */; };
+		4405527E2A6D83F7008D411D /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4405527D2A6D83F7008D411D /* ErrorView.swift */; };
 		44157EA4298C682A0013D56D /* EssentialFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44157E9B298C682A0013D56D /* EssentialFeed.framework */; };
 		44157EB4298C687A0013D56D /* FeedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44157EB3298C687A0013D56D /* FeedImage.swift */; };
 		44157EB6298C6A840013D56D /* FeedLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44157EB5298C6A840013D56D /* FeedLoader.swift */; };
@@ -142,6 +143,7 @@
 
 /* Begin PBXFileReference section */
 		4405527B2A6D6C98008D411D /* FeedPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedPresenterTests.swift; sourceTree = "<group>"; };
+		4405527D2A6D83F7008D411D /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
 		44157E9B298C682A0013D56D /* EssentialFeed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = EssentialFeed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		44157EA3298C682A0013D56D /* EssentialFeedTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EssentialFeedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		44157EB3298C687A0013D56D /* FeedImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImage.swift; sourceTree = "<group>"; };
@@ -378,6 +380,7 @@
 				4497375A2A4A3E97008A713E /* UIImageView+Animations.swift */,
 				449737582A4A3BE6008A713E /* UITableView+Dequeueing.swift */,
 				44CB02E52A3DE459008ED094 /* UIView+Shimmering.swift */,
+				4405527D2A6D83F7008D411D /* ErrorView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -890,6 +893,7 @@
 			files = (
 				44F0927D2A6358AE001E99BF /* FeedViewAdapter.swift in Sources */,
 				4497374D2A487820008A713E /* FeedPresenter.swift in Sources */,
+				4405527E2A6D83F7008D411D /* ErrorView.swift in Sources */,
 				4471AFC12A41F9F100F4D0E8 /* FeedImageDataLoader.swift in Sources */,
 				449737532A49CBED008A713E /* FeedViewModel.swift in Sources */,
 				449737592A4A3BE6008A713E /* UITableView+Dequeueing.swift in Sources */,
