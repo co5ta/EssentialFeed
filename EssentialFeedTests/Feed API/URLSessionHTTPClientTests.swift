@@ -130,16 +130,8 @@ final class URLSessionHTTPClientTests: XCTestCase {
         return receivedResult
     }
 
-    private var anyURL: URL {
-        URL(string: "http://any-url.com")!
-    }
-
     private var emptyData: Data {
         Data()
-    }
-
-    private var anyData: Data {
-        Data("any data".utf8)
     }
 
     private var notHTTPURLResponse: URLResponse {
