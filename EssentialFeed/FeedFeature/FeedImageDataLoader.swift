@@ -1,6 +1,6 @@
 //
 //  FeedImageDataLoader.swift
-//  EssentialFeediOS
+//  EssentialFeed
 //
 //  Created by Costa Monzili on 20/06/2023.
 //
