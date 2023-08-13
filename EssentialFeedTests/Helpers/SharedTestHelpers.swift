@@ -18,3 +18,7 @@ var anyNSError: NSError {
 var anyData: Data {
     Data("any data".utf8)
 }
+
+var emptyData: Data {
+    Data()
+}

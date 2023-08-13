@@ -130,10 +130,6 @@ final class URLSessionHTTPClientTests: XCTestCase {
         return receivedResult
     }
 
-    private var emptyData: Data {
-        Data()
-    }
-
     private var notHTTPURLResponse: URLResponse {
         URLResponse(url: anyURL, mimeType: nil, expectedContentLength: 0, textEncodingName: nil)
     }
