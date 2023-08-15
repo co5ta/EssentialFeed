@@ -31,7 +31,7 @@ final class LocalFeedImageDataLoader: FeedImageDataLoader {
         store.retrieve(dataForURL: url) { result in
             completion(result
                 .mapError { _ in Error.failed }
-                .flatMap { _ in .failure(Error.notFound) })
+                .flatMap { data in data.map { .success($0) } ?? .failure(Error.notFound) })
         }
         return Task()
     }
@@ -71,6 +71,15 @@ class LocalFeedImageDataLoaderTests: XCTestCase {
         })
     }
 
+    func test_loadImageDataFromURL_deliversStoredDataOnFoundData() {
+        let (sut, store) = makeSUT()
+        let foundData = anyData
+
+        expect(sut, toCompleteWith: .success(foundData), when: {
+            store.complete(with: foundData)
+        })
+    }
+
     // MARK: - Helpers
 
     private func makeSUT(currentDate: @escaping () -> Date = Date.init, file: StaticString = #file, line: UInt = #line) -> (sut: LocalFeedImageDataLoader, store: StoreSpy) {
@@ -91,7 +100,7 @@ class LocalFeedImageDataLoaderTests: XCTestCase {
 
     private func expect(_ sut: LocalFeedImageDataLoader, toCompleteWith expectedResult: FeedImageDataLoader.Result, when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
         let exp = expectation(description: "Wait for load completion")
-
+        
         _ = sut.loadImageData(from: anyURL) { receivedResult in
             switch (receivedResult, expectedResult) {
             case let (.success(receivedData), .success(expectedData)):
