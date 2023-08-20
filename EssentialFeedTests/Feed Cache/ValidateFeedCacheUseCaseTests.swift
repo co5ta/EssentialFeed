@@ -8,7 +8,8 @@
 import XCTest
 import EssentialFeed
 
-final class ValidateCacheUseCaseTests: XCTestCase {
+class ValidateFeedCacheUseCaseTests: XCTestCase {
+
     func test_init_doesNotMessageStoreUponCreation() {
         let (_, store) = makeSUT()
 
@@ -21,7 +22,7 @@ final class ValidateCacheUseCaseTests: XCTestCase {
         sut.validateCache { _ in }
         store.completeRetrieval(with: anyNSError)
 
-        XCTAssertEqual(store.receivedMessages, [.retrieve, .deleteCacheFeed])
+        XCTAssertEqual(store.receivedMessages, [.retrieve, .deleteCachedFeed])
     }
 
     func test_validateCache_doesNotDeleteCacheOnEmptyCache() {
@@ -34,36 +35,39 @@ final class ValidateCacheUseCaseTests: XCTestCase {
     }
 
     func test_validateCache_doesNotDeleteNonExpiredCache() {
+        let feed = uniqueImageFeed()
         let fixedCurrentDate = Date()
-        let (sut, store) = makeSUT(currentDate: { fixedCurrentDate })
         let nonExpiredTimestamp = fixedCurrentDate.minusFeedCacheMaxAge().adding(seconds: 1)
+        let (sut, store) = makeSUT(currentDate: { fixedCurrentDate })
 
         sut.validateCache { _ in }
-        store.completeRetrieval(with: uniqueImageFeed().local, timestamp: nonExpiredTimestamp)
+        store.completeRetrieval(with: feed.local, timestamp: nonExpiredTimestamp)
 
-        XCTAssertEqual(store.receivedMessages, [.retrieve, .deleteCacheFeed])
+        XCTAssertEqual(store.receivedMessages, [.retrieve])
     }
 
-    func test_validateCache_deletesOnCacheExpiration() {
+    func test_validateCache_deletesCacheOnExpiration() {
+        let feed = uniqueImageFeed()
         let fixedCurrentDate = Date()
-        let (sut, store) = makeSUT(currentDate: { fixedCurrentDate })
         let expirationTimestamp = fixedCurrentDate.minusFeedCacheMaxAge()
+        let (sut, store) = makeSUT(currentDate: { fixedCurrentDate })
 
         sut.validateCache { _ in }
-        store.completeRetrieval(with: uniqueImageFeed().local, timestamp: expirationTimestamp)
+        store.completeRetrieval(with: feed.local, timestamp: expirationTimestamp)
 
-        XCTAssertEqual(store.receivedMessages, [.retrieve, .deleteCacheFeed])
+        XCTAssertEqual(store.receivedMessages, [.retrieve, .deleteCachedFeed])
     }
 
     func test_validateCache_deletesExpiredCache() {
+        let feed = uniqueImageFeed()
         let fixedCurrentDate = Date()
-        let (sut, store) = makeSUT(currentDate: { fixedCurrentDate })
         let expiredTimestamp = fixedCurrentDate.minusFeedCacheMaxAge().adding(seconds: -1)
+        let (sut, store) = makeSUT(currentDate: { fixedCurrentDate })
 
         sut.validateCache { _ in }
-        store.completeRetrieval(with: uniqueImageFeed().local, timestamp: expiredTimestamp)
+        store.completeRetrieval(with: feed.local, timestamp: expiredTimestamp)
 
-        XCTAssertEqual(store.receivedMessages, [.retrieve, .deleteCacheFeed])
+        XCTAssertEqual(store.receivedMessages, [.retrieve, .deleteCachedFeed])
     }
 
     func test_validateCache_failsOnDeletionErrorOfFailedRetrieval() {
@@ -85,20 +89,29 @@ final class ValidateCacheUseCaseTests: XCTestCase {
         })
     }
 
+    func test_validateCache_succeedsOnEmptyCache() {
+        let (sut, store) = makeSUT()
+
+        expect(sut, toCompleteWith: .success(()), when: {
+            store.completeRetrievalWithEmptyCache()
+        })
+    }
+
     func test_validateCache_doesNotDeleteInvalidCacheAfterSUTInstanceHasBeenDeallocated() {
         let store = FeedStoreSpy()
         var sut: LocalFeedLoader? = LocalFeedLoader(store: store, currentDate: Date.init)
 
         sut?.validateCache { _ in }
+
         sut = nil
         store.completeRetrieval(with: anyNSError)
 
         XCTAssertEqual(store.receivedMessages, [.retrieve])
     }
-}
 
-extension ValidateCacheUseCaseTests {
-    private func makeSUT(currentDate: @escaping () -> Date = Date.init, file: StaticString = #file, line: UInt = #line) -> (LocalFeedLoader, FeedStoreSpy) {
+    // MARK: - Helpers
+
+    private func makeSUT(currentDate: @escaping () -> Date = Date.init, file: StaticString = #file, line: UInt = #line) -> (sut: LocalFeedLoader, store: FeedStoreSpy) {
         let store = FeedStoreSpy()
         let sut = LocalFeedLoader(store: store, currentDate: currentDate)
         trackForMemoryLeaks(element: store, file: file, line: line)
