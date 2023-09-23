@@ -93,6 +93,7 @@
 		44FE1D8B2ABEDA6E006254CA /* UIImage+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44FE1D8A2ABEDA6E006254CA /* UIImage+TestHelpers.swift */; };
 		44FE1D8D2ABEDE0F006254CA /* UITableView+HeaderSizing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44FE1D8C2ABEDE0F006254CA /* UITableView+HeaderSizing.swift */; };
 		44FE1D902ABF8819006254CA /* UIViewController+Snapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44FE1D8F2ABF8819006254CA /* UIViewController+Snapshot.swift */; };
+		44FE1D922ABF88D4006254CA /* XCTestCase+Snapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44FE1D912ABF88D4006254CA /* XCTestCase+Snapshot.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -235,6 +236,7 @@
 		44FE1D8A2ABEDA6E006254CA /* UIImage+TestHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+TestHelpers.swift"; sourceTree = "<group>"; };
 		44FE1D8C2ABEDE0F006254CA /* UITableView+HeaderSizing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+HeaderSizing.swift"; sourceTree = "<group>"; };
 		44FE1D8F2ABF8819006254CA /* UIViewController+Snapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Snapshot.swift"; sourceTree = "<group>"; };
+		44FE1D912ABF88D4006254CA /* XCTestCase+Snapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+Snapshot.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -598,6 +600,7 @@
 			isa = PBXGroup;
 			children = (
 				44FE1D8F2ABF8819006254CA /* UIViewController+Snapshot.swift */,
+				44FE1D912ABF88D4006254CA /* XCTestCase+Snapshot.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -944,6 +947,7 @@
 			files = (
 				448B40A72A17F49000FF187C /* XCTestCase+MemoryLeakTracking.swift in Sources */,
 				44FE1D892ABE331E006254CA /* FeedSnapshotTests.swift in Sources */,
+				44FE1D922ABF88D4006254CA /* XCTestCase+Snapshot.swift in Sources */,
 				44FE1D902ABF8819006254CA /* UIViewController+Snapshot.swift in Sources */,
 				44FE1D8B2ABEDA6E006254CA /* UIImage+TestHelpers.swift in Sources */,
 			);
