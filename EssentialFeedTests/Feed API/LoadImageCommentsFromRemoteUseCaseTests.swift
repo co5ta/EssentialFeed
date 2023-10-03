@@ -44,7 +44,7 @@ final class LoadImageCommentsFromRemoteUseCaseTests: XCTestCase {
         }
     }
 
-    func test_load_deliversErrorOnNon2xxHTTPURLResponse() {
+    func test_load_deliversErrorOnNon2xxHTTPResponse() {
         let (sut, client) = makeSUT()
 
         let samples = [199, 150, 300, 400, 500]
@@ -57,7 +57,7 @@ final class LoadImageCommentsFromRemoteUseCaseTests: XCTestCase {
         }
     }
 
-    func test_load_deliversErrorOn2xxWithInvalidJSON() {
+    func test_load_deliversErrorOn2xxHTTPResponseWithInvalidJSON() {
         let (sut, client) = makeSUT()
 
         let samples = [200, 201, 250, 280, 299]
@@ -83,21 +83,30 @@ final class LoadImageCommentsFromRemoteUseCaseTests: XCTestCase {
         }
     }
 
-    func test_loads_deliversItemsOn200HTTPResponseWithJSONItems() {
+    func test_load_deliversItemsOn2xxHTTPResponseWithJSONItems() {
         let (sut, client) = makeSUT()
 
-        let item1 = makeItem(imageURL: URL(string: "http://one-url.com")!)
-        let item2 = makeItem(description: "a description", location: "a location", imageURL: URL(string: "http://another-url.com")!)
+        let item1 = makeItem(
+            id: UUID(),
+            message: "a message",
+            createdAt: (Date(timeIntervalSince1970: 1598627222), "2020-08-28T15:07:02+00:00"),
+            username: "a username")
+
+        let item2 = makeItem(
+            id: UUID(),
+            message: "another message",
+            createdAt: (Date(timeIntervalSince1970: 1577881882), "2020-01-01T12:31:22+00:00"),
+            username: "another username")
 
         let items = [item1.model, item2.model]
 
         let samples = [200, 201, 250, 280, 299]
 
-        samples.enumerated().forEach { (index, code) in
-            expect(sut, toCompleteWith: .success(items)) {
+        samples.enumerated().forEach { index, code in
+            expect(sut, toCompleteWith: .success(items), when: {
                 let json = makeItemJSON([item1.json, item2.json])
                 client.complete(withStatusCode: code, data: json, at: index)
-            }
+            })
         }
     }
 
@@ -129,15 +138,17 @@ final class LoadImageCommentsFromRemoteUseCaseTests: XCTestCase {
         return  .failure(error)
     }
 
-    private func makeItem(id: UUID = UUID(), description: String? = nil, location: String? = nil, imageURL: URL) -> (model: FeedImage, json: [String: Any]) {
-        let item = FeedImage(id: id, description: description, location: location, url: imageURL)
-        let json = [
-            "id": item.id.uuidString,
-            "description": item.description,
-            "location": item.location,
-            "image": item.url.absoluteString
+    private func makeItem(id: UUID, message: String, createdAt: (date: Date, iso8601String: String), username: String) -> (model: ImageComment, json: [String: Any]) {
+        let item = ImageComment(id: id, message: message, createdAt: createdAt.date, username: username)
+
+        let json: [String: Any] = [
+            "id": id.uuidString,
+            "message": message,
+            "created_at": createdAt.iso8601String,
+            "author": [
+                "username": username
+            ]
         ]
-        .compactMapValues { $0 }
 
         return (item, json)
     }
