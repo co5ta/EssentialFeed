@@ -394,8 +394,8 @@
 		44387C822A759AE400ED8A88 /* Feed Presentation */ = {
 			isa = PBXGroup;
 			children = (
-				44387C842A759B3C00ED8A88 /* FeedPresenter.swift */,
 				44D8C4042ADAC9FE00A25D24 /* LoadResourcePresenter.swift */,
+				44387C842A759B3C00ED8A88 /* FeedPresenter.swift */,
 				44387C8B2A759EBC00ED8A88 /* FeedLoadingViewModel.swift */,
 				44387C892A759E7400ED8A88 /* FeedErrorViewModel.swift */,
 				44387C872A759E1800ED8A88 /* FeedViewModel.swift */,
