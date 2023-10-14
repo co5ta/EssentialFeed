@@ -6,10 +6,6 @@
 //
 import Foundation
 
-public protocol FeedLoadingView {
-    func display(_ viewModel: FeedLoadingViewModel )
-}
-
 public protocol FeedErrorView {
     func display(_ viewModel: FeedErrorViewModel)
 }
@@ -19,7 +15,7 @@ public protocol FeedView {
 }
 
 public final class FeedPresenter {
-    private let loadingView: FeedLoadingView
+    private let loadingView: ResourceLoadingView
     private let errorView: FeedErrorView
     private let feedView: FeedView
 
@@ -31,7 +27,7 @@ public final class FeedPresenter {
         return NSLocalizedString("FEED_VIEW_TITLE", tableName: "Feed", bundle: Bundle(for: FeedPresenter.self), comment: "Title for the feed view")
     }
 
-    public init(loadingView: FeedLoadingView,
+    public init(loadingView: ResourceLoadingView,
          errorView: FeedErrorView,
          feedView: FeedView) {
         self.loadingView = loadingView
@@ -41,16 +37,16 @@ public final class FeedPresenter {
 
     public func didStartLoadingFeed() {
         errorView.display(FeedErrorViewModel.noError)
-        loadingView.display(FeedLoadingViewModel(isLoading: true))
+        loadingView.display(ResourceLoadingViewModel(isLoading: true))
     }
 
     public func didFinishLoadingFeed(with feed: [FeedImage]) {
         feedView.display(FeedViewModel(feed: feed))
-        loadingView.display(FeedLoadingViewModel(isLoading: false))
+        loadingView.display(ResourceLoadingViewModel(isLoading: false))
     }
 
     public func didFinishLoadingFeed(with error: Error) {
         errorView.display(FeedErrorViewModel.error(message: feedLoadError))
-        loadingView.display(FeedLoadingViewModel(isLoading: false))
+        loadingView.display(ResourceLoadingViewModel(isLoading: false))
     }
 }
