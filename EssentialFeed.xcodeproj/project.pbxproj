@@ -544,9 +544,7 @@
 		448B40942A167DF000FF187C /* EssentialFeediOSTests */ = {
 			isa = PBXGroup;
 			children = (
-				448B409E2A167EDD00FF187C /* EssentialFeediOS.xctestplan */,
-				44FE1D882ABE331E006254CA /* FeedSnapshotTests.swift */,
-				44FE1D8A2ABEDA6E006254CA /* UIImage+TestHelpers.swift */,
+				44E2883E2ADDE78F001D83DB /* Feed UI */,
 				44FE1D8E2ABF87EE006254CA /* Helpers */,
 			);
 			path = EssentialFeediOSTests;
@@ -622,6 +620,15 @@
 				4492B6132ADAF61F00E95CF3 /* SharedLocalizationTestHelpers.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		44E2883E2ADDE78F001D83DB /* Feed UI */ = {
+			isa = PBXGroup;
+			children = (
+				448B409E2A167EDD00FF187C /* EssentialFeediOS.xctestplan */,
+				44FE1D882ABE331E006254CA /* FeedSnapshotTests.swift */,
+			);
+			path = "Feed UI";
 			sourceTree = "<group>";
 		};
 		44F93A2A2ACB6633001BCA74 /* ImageCommentFeature */ = {
@@ -712,6 +719,7 @@
 			children = (
 				44FE1D8F2ABF8819006254CA /* UIViewController+Snapshot.swift */,
 				44FE1D912ABF88D4006254CA /* XCTestCase+Snapshot.swift */,
+				44FE1D8A2ABEDA6E006254CA /* UIImage+TestHelpers.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
