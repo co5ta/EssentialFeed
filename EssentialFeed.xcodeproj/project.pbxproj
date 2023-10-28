@@ -326,9 +326,42 @@
 			isa = PBXGroup;
 			children = (
 				4497375A2A4A3E97008A713E /* UIImageView+Animations.swift */,
+				44CB02E52A3DE459008ED094 /* UIView+Shimmering.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		440FA3B22AECEBA2008D2845 /* Shared UI */ = {
+			isa = PBXGroup;
+			children = (
+				440FA3B32AECEBA8008D2845 /* Controllers */,
+				440FA3B42AECEC1B008D2845 /* Views */,
+			);
+			path = "Shared UI";
+			sourceTree = "<group>";
+		};
+		440FA3B32AECEBA8008D2845 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				44E88E372A18865300283898 /* ListViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		440FA3B42AECEC1B008D2845 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				440FA3B52AECEC52008D2845 /* Helpers */,
+				4405527D2A6D83F7008D411D /* ErrorView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		440FA3B52AECEC52008D2845 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
 				440552822A6D9673008D411D /* UIRefreshControl+Helpers.swift */,
 				449737582A4A3BE6008A713E /* UITableView+Dequeueing.swift */,
-				44CB02E52A3DE459008ED094 /* UIView+Shimmering.swift */,
 				44FE1D8C2ABEDE0F006254CA /* UITableView+HeaderSizing.swift */,
 			);
 			path = Helpers;
@@ -455,7 +488,6 @@
 			isa = PBXGroup;
 			children = (
 				449737412A435617008A713E /* FeedImageCellController.swift */,
-				44E88E372A18865300283898 /* ListViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -466,7 +498,6 @@
 				449737562A4A080A008A713E /* Feed.xcassets */,
 				449737542A4A060D008A713E /* Feed.storyboard */,
 				44E88E392A1A8C7100283898 /* FeedImageCell.swift */,
-				4405527D2A6D83F7008D411D /* ErrorView.swift */,
 				4405527F2A6D9521008D411D /* Helpers */,
 			);
 			path = Views;
@@ -536,6 +567,7 @@
 		448B408A2A167DEF00FF187C /* EssentialFeediOS */ = {
 			isa = PBXGroup;
 			children = (
+				440FA3B22AECEBA2008D2845 /* Shared UI */,
 				4471AFBC2A41F94900F4D0E8 /* FeedUI */,
 			);
 			path = EssentialFeediOS;
