@@ -34,9 +34,8 @@ public final class ListViewController: UITableViewController, UITableViewDataSou
 
     public var onRefresh: (() -> Void)?
 
-    public override func viewDidLoad() {
-        super.viewDidLoad()
-
+    public override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         refresh()
     }
 
