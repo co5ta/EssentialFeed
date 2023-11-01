@@ -9,7 +9,7 @@ import XCTest
 import EssentialFeediOS
 @testable import EssentialFeed
 
-final class ImageCommentsSnapshotTests: XCTestCase {
+class ImageCommentsSnapshotTests: XCTestCase {
 
     func test_listWithComments() {
         let sut = makeSUT()
@@ -34,10 +34,10 @@ final class ImageCommentsSnapshotTests: XCTestCase {
     }
 
     private func comments() -> [CellController] {
-        commentsControllers().map { CellController($0) }
+        commentControllers().map { CellController(id: UUID(), $0) }
     }
 
-    private func commentsControllers() -> [ImageCommentCellController] {
+    private func commentControllers() -> [ImageCommentCellController] {
         return [
             ImageCommentCellController(
                 model: ImageCommentViewModel(
@@ -62,4 +62,5 @@ final class ImageCommentsSnapshotTests: XCTestCase {
             ),
         ]
     }
+
 }
