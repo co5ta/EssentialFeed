@@ -30,6 +30,7 @@ public final class ListViewController: UITableViewController, UITableViewDataSou
         dataSource.defaultRowAnimation = .fade
         tableView.dataSource = dataSource
         tableView.tableHeaderView = errorView.makeContainer()
+        display([CellController]())
 
         errorView.onHide = { [weak self] in
             self?.tableView.beginUpdates()
