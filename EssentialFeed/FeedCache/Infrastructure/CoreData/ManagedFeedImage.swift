@@ -31,14 +31,17 @@ extension ManagedFeedImage {
     }
 
     static func images(from feed: [LocalFeedImage], in context: NSManagedObjectContext) -> NSOrderedSet {
-        return NSOrderedSet(array: feed.map { localFeed in
+        let images = NSOrderedSet(array: feed.map { localFeed in
             let managedFeedImage = ManagedFeedImage(context: context)
             managedFeedImage.id = localFeed.id
             managedFeedImage.imageDescription = localFeed.description
             managedFeedImage.location = localFeed.location
             managedFeedImage.url = localFeed.url
+            managedFeedImage.data = context.userInfo[localFeed.url] as? Data
             return managedFeedImage
         })
+        context.userInfo.removeAllObjects()
+        return images
     }
 
     var localFeedImage: LocalFeedImage {
@@ -47,5 +50,11 @@ extension ManagedFeedImage {
             description: imageDescription,
             location: location,
             url: url)
+    }
+
+    override func prepareForDeletion() {
+        super.prepareForDeletion()
+
+        managedObjectContext?.userInfo[url] = data
     }
 }
