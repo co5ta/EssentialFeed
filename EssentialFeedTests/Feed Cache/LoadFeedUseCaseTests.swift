@@ -76,8 +76,8 @@ final class LoadFeedUseCaseTests: XCTestCase {
     func test_load_hasNoSideEffectOnRetrievalError() {
         let (sut, store) = makeSUT()
 
-        sut.load { _ in }
         store.completeRetrieval(with: anyNSError)
+        sut.load { _ in }
 
         XCTAssertEqual(store.receivedMessages, [.retrieve])
     }
@@ -85,8 +85,8 @@ final class LoadFeedUseCaseTests: XCTestCase {
     func test_load_hasNoSideEffectOnEmptyCache() {
         let (sut, store) = makeSUT()
 
-        sut.load { _ in }
         store.completeRetrievalWithEmptyCache()
+        sut.load { _ in }
 
         XCTAssertEqual(store.receivedMessages, [.retrieve])
     }
@@ -96,8 +96,8 @@ final class LoadFeedUseCaseTests: XCTestCase {
         let (sut, store) = makeSUT(currentDate: { fixedCurrentDate })
         let nonExpiredTimestamp = fixedCurrentDate.minusFeedCacheMaxAge().adding(seconds: 1)
 
-        sut.load { _ in }
         store.completeRetrieval(with: uniqueImageFeed().local, timestamp: nonExpiredTimestamp)
+        sut.load { _ in }
 
         XCTAssertEqual(store.receivedMessages, [.retrieve])
     }
@@ -107,8 +107,8 @@ final class LoadFeedUseCaseTests: XCTestCase {
         let (sut, store) = makeSUT(currentDate: { fixedCurrentDate })
         let expirationTimestamp = fixedCurrentDate.minusFeedCacheMaxAge()
 
-        sut.load { _ in }
         store.completeRetrieval(with: uniqueImageFeed().local, timestamp: expirationTimestamp)
+        sut.load { _ in }
 
         XCTAssertEqual(store.receivedMessages, [.retrieve])
     }
@@ -118,25 +118,10 @@ final class LoadFeedUseCaseTests: XCTestCase {
         let (sut, store) = makeSUT(currentDate: { fixedCurrentDate })
         let expiredTimestamp = fixedCurrentDate.minusFeedCacheMaxAge().adding(seconds: -1)
 
-        sut.load { _ in }
         store.completeRetrieval(with: uniqueImageFeed().local, timestamp: expiredTimestamp)
+        sut.load { _ in }
 
         XCTAssertEqual(store.receivedMessages, [.retrieve])
-    }
-
-    func test_load_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated() {
-        let store = FeedStoreSpy()
-        var sut: LocalFeedLoader? = LocalFeedLoader(store: store, currentDate: Date.init)
-
-        var receivedResults = [LocalFeedLoader.LoadResult]()
-        sut?.load(completion: { result in
-            receivedResults.append(result)
-        })
-
-        sut = nil
-        store.completeRetrieval(with: uniqueImageFeed().local, timestamp: Date())
-
-        XCTAssertTrue(receivedResults.isEmpty)
     }
 }
 
@@ -151,6 +136,8 @@ extension LoadFeedUseCaseTests {
 
     private func expect(_ sut: LocalFeedLoader, toCompleteWith expectedResult: LocalFeedLoader.LoadResult, when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
         let exp = expectation(description: "wait for load completion")
+        action()
+
         sut.load { receivedResult in
             switch (receivedResult, expectedResult) {
             case let (.success(receivedFeed), .success(expectedFeed)):
@@ -162,7 +149,6 @@ extension LoadFeedUseCaseTests {
             }
             exp.fulfill()
         }
-        action()
         wait(for: [exp], timeout: 1.0)
     }
 }
