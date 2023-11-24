@@ -20,7 +20,7 @@ final class CacheFeedUseCaseTests: XCTestCase {
         let deletionError = anyNSError
 
         store.completeDeletion(with: deletionError)
-        sut.save(uniqueImageFeed().model) { _ in }
+        try? sut.save(uniqueImageFeed().model)
 
         XCTAssertEqual(store.receivedMessages, [.deleteCachedFeed])
     }
@@ -31,7 +31,7 @@ final class CacheFeedUseCaseTests: XCTestCase {
         let feed = uniqueImageFeed()
 
         store.completeDeletionSuccessfully()
-        sut.save(feed.model) { _ in }
+        try? sut.save(feed.model)
 
         XCTAssertEqual(store.receivedMessages, [.deleteCachedFeed, .insert(feed.local, timestamp)])
     }
@@ -77,19 +77,12 @@ extension CacheFeedUseCaseTests {
     }
 
     private func expect(_ sut: LocalFeedLoader, toCompleteWithError expectedError: NSError?, when action: @escaping () -> Void, file: StaticString = #file, line: UInt = #line) {
-        let exp = expectation(description: "wait for  completion")
         action()
 
-        var receivedError: Error?
-        sut.save(uniqueImageFeed().model) { result in
-            if case let .failure(error) = result {
-                receivedError = error
-            }
-            exp.fulfill()
+        do {
+            try sut.save(uniqueImageFeed().model)
+        } catch {
+            XCTAssertEqual(error as NSError?, expectedError, file: file, line: line)
         }
-
-        wait(for: [exp], timeout: 1.0)
-
-        XCTAssertEqual(receivedError as NSError?, expectedError, file: file, line: line)
     }
 }
